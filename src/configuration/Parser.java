@@ -2,6 +2,7 @@ package configuration;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,23 +16,6 @@ public class Parser {
     public Parser(String url) {
         evaluateUrl(url);
     }
-
-    public String getController() {
-        return controller;
-    }
-
-    public void setController(String controller) {
-        this.controller = controller;
-    }
-
-    public String getMethod() {
-        return method;
-    }
-
-    public void setMethod(String method) {
-        this.method = method;
-    }
-
 
     /**
      * URL example
@@ -59,8 +43,8 @@ public class Parser {
         if(queryParameter.length > 1){
             String[] paramsTokenized = queryParameter[1].split("&");
             this.params = new HashMap<>();
-            for(int i = 0; i < paramsTokenized.length; i++){
-                String[] paramsLine = paramsTokenized[i].split("=");
+            for (String s : paramsTokenized) {
+                String[] paramsLine = s.split("=");
                 this.params.put(paramsLine[0], paramsLine[1]);
             }
         }else{
@@ -74,12 +58,14 @@ public class Parser {
         return name;
     }
 
-    public Object instantiate(){
+    private Object instantiate(){
         try{
-            return Class.forName("clazz." + CaptalizeControllerName(controller)).newInstance();
+            return Class.forName("clazz." + CaptalizeControllerName(controller)).getConstructor().newInstance();
         } catch(ClassNotFoundException
-                | IllegalAccessException
-                | InstantiationException e){
+                | NoSuchMethodException
+                |IllegalAccessException
+                |InvocationTargetException
+                |InstantiationException e){
             System.err.println("Ocorreu um erro: " + e.getMessage());
             return null;
         }
@@ -93,7 +79,13 @@ public class Parser {
             if(this.params == null){
                 return method.invoke(obj);
             }else{
-                return method.invoke(obj, params.values().toArray());
+                TypeCast caster = new TypeCast();
+                List<Object> objs = new ArrayList<>();
+                for(String s : params.values()){
+                    caster.setObj(s);
+                    objs.add(caster.castToType());
+                }
+                return method.invoke(obj, objs.toArray());
             }
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             e.printStackTrace();

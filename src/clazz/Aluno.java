@@ -10,7 +10,7 @@ public class Aluno {
         System.out.println("default method with args: " + arg);
     }
 
-    public void list(String matricula){
+    public void list(Integer matricula){
         System.out.println("list alunos " + matricula);
     }
 }

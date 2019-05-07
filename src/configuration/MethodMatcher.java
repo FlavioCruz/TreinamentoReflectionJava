@@ -3,19 +3,19 @@ package configuration;
 import java.lang.reflect.Method;
 import java.util.Map;
 
-public class MethodMatcher {
+class MethodMatcher {
 
     private Object clazz;
     private String invokedMethod;
     private Map<String, String> params;
 
-    public MethodMatcher(Object clazz, String invokedMethod, Map<String, String> params) {
+    MethodMatcher(Object clazz, String invokedMethod, Map<String, String> params) {
         this.clazz = clazz;
         this.invokedMethod = invokedMethod;
         this.params = params;
     }
 
-    public Method macth() throws NoSuchMethodException {
+    Method macth() throws NoSuchMethodException {
         Method[] methods = clazz.getClass().getDeclaredMethods();
         int paramsSize;
         if(this.params == null){
@@ -24,16 +24,31 @@ public class MethodMatcher {
         else{
             paramsSize = this.params.size();
         }
-        for (int i = 0; i < methods.length; i++){
+        for (Method method : methods) {
 
-            if(invokedMethod == null){
-                if(methods[i].getParameterCount() == paramsSize){
-                    return methods[i];
+            if(params != null && checkParamsType(method, params.values().toArray())){
+                if (invokedMethod == null) {
+                    if (method.getParameterCount() == paramsSize) {
+                        return method;
+                    }
+                } else if (method.getParameterCount() == paramsSize && method.getName().equals(this.invokedMethod)) {
+                    return method;
                 }
-            } else if(methods[i].getParameterCount() == paramsSize && methods[i].getName().equals(this.invokedMethod)){
-                return methods[i];
             }
         }
         throw new NoSuchMethodException();
+    }
+
+    private boolean checkParamsType(Method method, Object[] params){
+        if(params.length != 0 && method.getParameters().length != 0){
+            TypeCast caster = new TypeCast();
+            for(int i = 0; i < params.length; i++){
+                caster.setObj(params[i]);
+                if(!method.getParameters()[i].getType().isInstance(caster.castToType())){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
