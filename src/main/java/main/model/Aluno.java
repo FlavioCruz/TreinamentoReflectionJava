@@ -1,5 +1,8 @@
-package clazz;
+package main.model;
 
+import injection.annotation.Entity;
+
+@Entity
 public class Aluno {
 
     public void defaultMethod(){
@@ -10,7 +13,7 @@ public class Aluno {
         System.out.println("default method with args: " + arg);
     }
 
-    public void list(Integer matricula){
-        System.out.println("list alunos " + matricula);
+    public String list(Integer matricula){
+        return "list method with parameter: " + matricula;
     }
 }
