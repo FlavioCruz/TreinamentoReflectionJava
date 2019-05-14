@@ -25,9 +25,8 @@ public class Main {
          * @param url
          */
         String url = tc.next();
-        Parser parser = new Parser(url, Main.class);
-        Object obj = parser.instantiateController();
-        Executioner exec = new Executioner(obj, parser.getMethod(), parser.getParams());
+        Parser parser = new Parser(url);
+        Executioner exec = new Executioner(parser);
         System.out.println(exec.execute());
     }
 }

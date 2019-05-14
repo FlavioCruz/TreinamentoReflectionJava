@@ -14,10 +14,11 @@ public class Executioner {
     private String methodName;
     private Map<String, String> params;
 
-    public Executioner(Object obj, String methodName, Map<String, String> params) {
-        this.obj = obj;
-        this.methodName = methodName;
-        this.params = params;
+    public Executioner(Parser parser) {
+        Request req = parser.evaluateUrl();
+        this.obj = req.instantiateController();
+        this.methodName = req.getMethod();
+        this.params = req.getParams();
     }
 
     /**

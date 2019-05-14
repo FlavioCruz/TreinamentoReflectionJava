@@ -28,12 +28,12 @@ class MethodMatcher {
         Method[] methods = clazz.getClass().getDeclaredMethods();
         for (Method method : methods) {
 
-            if(params != null && checkParamsType(method, params.values().toArray()) && checkParamsName(method, params.keySet().toArray()) ){
+            if(checkParamsType(method, params.values().toArray())){
                 if (invokedMethod == null) {
                     if (method.getParameterCount() == params.size()) {
                         return method;
                     }
-                } else if (method.getParameterCount() == params.size() && method.getName().equals(this.invokedMethod)) {
+                } else if (method.getParameterCount() == params.size()) {
                     return method;
                 }
             }
@@ -60,31 +60,31 @@ class MethodMatcher {
         return true;
     }
 
-    private boolean checkParamsName(Method method, Object[] params){
-        List<String> names = getParameterNames(method);
-        if(params.length != 0 && names.size() != 0){
-            for(int i = 0; i < params.length; i++){
-                if(!names.get(i).equals(params[i])){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private List<String> getParameterNames(Method method) {
-        Parameter[] parameters = method.getParameters();
-        List<String> parameterNames = new ArrayList<>();
-
-        for (Parameter parameter : parameters) {
-            if(!parameter.isNamePresent()) {
-                throw new IllegalArgumentException("Parameter names are not present!");
-            }
-
-            String parameterName = parameter.getName();
-            parameterNames.add(parameterName);
-        }
-
-        return parameterNames;
-    }
+//    private boolean checkParamsName(Method method, Object[] params){
+//        List<String> names = getParameterNames(method);
+//        if(params.length != 0 && names.size() != 0){
+//            for(int i = 0; i < params.length; i++){
+//                if(!names.get(i).equals(params[i])){
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
+//
+//    private List<String> getParameterNames(Method method) {
+//        Parameter[] parameters = method.getParameters();
+//        List<String> parameterNames = new ArrayList<>();
+//
+//        for (Parameter parameter : parameters) {
+//            if(!parameter.isNamePresent()) {
+//                throw new IllegalArgumentException("Parameter names are not present!");
+//            }
+//
+//            String parameterName = parameter.getName();
+//            parameterNames.add(parameterName);
+//        }
+//
+//        return parameterNames;
+//    }
 }
