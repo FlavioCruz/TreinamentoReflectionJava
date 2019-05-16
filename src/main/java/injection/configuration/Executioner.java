@@ -1,6 +1,6 @@
 package injection.configuration;
 
-import main.exception.ExecutionException;
+import injection.exception.ExecutionException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

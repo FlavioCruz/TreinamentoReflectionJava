@@ -1,19 +1,10 @@
 package injection.configuration;
 
-import injection.annotation.ApplicationContext;
-import injection.annotation.Entity;
-import injection.annotation.Inject;
-import injection.annotation.Service;
-import main.exception.ParsingException;
+import injection.exception.ParsingException;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class Parser {
 
@@ -25,14 +16,17 @@ public class Parser {
      * controller?param=value ok
      * controller/method?param=value
      * controller/method?param1=value&param2=value
-     *
-     * @param url
+     * @param url {@link String}
      */
     public Parser(String url) {
         this.url = url;
     }
 
-    public Request evaluateUrl() {
+    /**
+     * Evaluates the URL and return a new instance of Request with all fields fullfilled
+     * @return {@link Request}
+     */
+    Request evaluateUrl() {
         String controller, method;
         String[] urlTokenized = url.split("/"), queryParameter;
         if (urlTokenized.length < 2) {
@@ -47,6 +41,11 @@ public class Parser {
         return new Request(CaptalizeControllerName(controller), method, createParams(queryParameter));
     }
 
+    /**
+     * Returns a dictionary with the name of the parameter as key and the value as value.
+     * @param queryParameter {@link String}
+     * @return {@link Map<String, String>}
+     */
     private Map<String, String> createParams(String[] queryParameter) {
         Map<String, String> params;
         if (queryParameter.length > 1) {
@@ -62,6 +61,10 @@ public class Parser {
         return params;
     }
 
+    /**
+     * @param name {@link String}
+     * @return {@link String}
+     */
     private String CaptalizeControllerName(String name) {
         String firstLetter = name.substring(0, 1);
         name = name.replaceFirst(firstLetter, firstLetter.toUpperCase());

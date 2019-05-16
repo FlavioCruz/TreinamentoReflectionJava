@@ -1,4 +1,4 @@
-package main.exception;
+package injection.exception;
 
 public class ParsingException extends RuntimeException {
 

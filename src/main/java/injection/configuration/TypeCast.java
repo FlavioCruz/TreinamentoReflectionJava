@@ -1,5 +1,6 @@
 package injection.configuration;
 
+import injection.exception.CastingException;
 import java.util.Date;
 
 public class TypeCast {
@@ -7,6 +8,11 @@ public class TypeCast {
     public TypeCast() {
     }
 
+    /**
+     * Receives an object and tries to cast to a basic data type
+     * @param obj {@link Object}
+     * @return {@link Object}
+     */
     public Object castToType(Object obj){
         return castToInt(obj);
     }
@@ -65,6 +71,10 @@ public class TypeCast {
     }
 
     private Object castToString(Object obj){
-        return obj.toString();
+        try{
+            return new StringBuilder((String) obj).toString();
+        }catch (ClassCastException e){
+            throw new CastingException(e);
+        }
     }
 }

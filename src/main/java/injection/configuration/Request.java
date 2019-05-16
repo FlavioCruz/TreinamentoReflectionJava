@@ -1,8 +1,9 @@
 package injection.configuration;
 
 import injection.annotation.Inject;
-import main.exception.ParsingException;
+import injection.exception.ParsingException;
 
+import java.lang.annotation.Documented;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -40,6 +41,11 @@ public class Request {
         return instantiate("Service");
     }
 
+    /**
+     * Creates a new instance of the object, given the class sufix
+     * @param sufix {@link String}
+     * @return {@link Object}
+     */
     private Object instantiate(String sufix){
         try{
             Object obj = Class.forName("main." + sufix.toLowerCase() + "."
@@ -54,6 +60,11 @@ public class Request {
         }
     }
 
+    /**
+     * Instantiates all dependencies of the given class and goes on recursively
+     * @param obj {@link Object}
+     * @return {@link Object}
+     */
     private Object instantiateDependencies(Object obj){
         Field[] dependencies =  obj.getClass().getDeclaredFields();
         if(dependencies.length == 0 || obj.equals("")){
