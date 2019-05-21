@@ -2,10 +2,14 @@ package injection.configuration;
 
 import injection.exception.ParsingException;
 
+import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Parser.
+ */
 public class Parser {
 
     private String url;
@@ -16,6 +20,7 @@ public class Parser {
      * controller?param=value ok
      * controller/method?param=value
      * controller/method?param1=value&param2=value
+     *
      * @param url {@link String}
      */
     public Parser(String url) {
@@ -24,21 +29,26 @@ public class Parser {
 
     /**
      * Evaluates the URL and return a new instance of Request with all fields fullfilled
+     *
      * @return {@link Request}
      */
     Request evaluateUrl() {
         String controller, method;
-        String[] urlTokenized = url.split("/"), queryParameter;
-        if (urlTokenized.length < 2) {
-            queryParameter = urlTokenized[0].split("\\?");
-            controller = queryParameter[0];
-            method = null;
-        } else {
-            controller = urlTokenized[0];
-            queryParameter = urlTokenized[1].split("\\?");
-            method = queryParameter[0];
+        try{
+            String[] urlTokenized = url.split("/"), queryParameter;
+            if (urlTokenized.length < 2) {
+                queryParameter = urlTokenized[0].split("\\?");
+                controller = queryParameter[0];
+                method = null;
+            } else {
+                controller = urlTokenized[0];
+                queryParameter = urlTokenized[1].split("\\?");
+                method = queryParameter[0];
+            }
+            return new Request(CaptalizeControllerName(controller), method, createParams(queryParameter));
+        }catch (NullPointerException | StringIndexOutOfBoundsException e){
+            throw new ParsingException(new MalformedURLException("URL informed was malformed"));
         }
-        return new Request(CaptalizeControllerName(controller), method, createParams(queryParameter));
     }
 
     /**

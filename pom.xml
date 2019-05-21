@@ -9,8 +9,8 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
-        <maven.compiler.source>11.0.2</maven.compiler.source>
-        <maven.compiler.target>11.0.2</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -22,7 +22,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/junit/junit -->
+<!--         https://mvnrepository.com/artifact/junit/junit-->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -42,7 +42,12 @@
             <version>1.18.8</version>
             <scope>provided</scope>
         </dependency>
-
+        <dependency>
+            <groupId>br.uff.proac.carga</groupId>
+            <artifactId>CARGA-IDUFF</artifactId>
+            <version>1.6.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -56,11 +61,46 @@
                     <compilerArgument>-parameters</compilerArgument>
                     <!-- Or, if you use the plugin version >= 3.6.2 -->
 <!--                    <parameters>true</parameters>-->
-                    <testCompilerArgument>-parameters</testCompilerArgument>
-                    <source>9</source>
-                    <target>9</target>
+<!--                    <testCompilerArgument>-parameters</testCompilerArgument>-->
+<!--                    <source>9</source>-->
+<!--                    <target>9</target>-->
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.3</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.pitest</groupId>-->
+<!--                <artifactId>pitest-maven</artifactId>-->
+<!--                <version>1.4.7</version>-->
+<!--                <configuration>-->
+<!--                    <targetClasses>-->
+<!--                        <param>injection*</param>-->
+<!--                    </targetClasses>-->
+<!--                    <targetTests>-->
+<!--                        <param>injection*</param>-->
+<!--                    </targetTests>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

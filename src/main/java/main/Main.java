@@ -6,7 +6,7 @@ import injection.configuration.Parser;
 
 import java.util.Scanner;
 
-@ApplicationContext(Main.class)
+@ApplicationContext
 public class Main {
     public static void main(String[] args){
         Scanner tc = new Scanner(System.in);

@@ -1,13 +1,20 @@
 package injection.configuration;
 
+import injection.annotation.ApplicationContext;
 import injection.annotation.Inject;
 import injection.exception.ParsingException;
+import org.reflections.Reflections;
 
 import java.lang.annotation.Documented;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Request {
 
@@ -19,10 +26,6 @@ public class Request {
         this.controller = captalizeControllerName;
         this.method = method;
         this.params = params;
-    }
-
-    public String getController() {
-        return controller;
     }
 
     public String getMethod() {
@@ -72,11 +75,9 @@ public class Request {
         }
         Arrays.stream(dependencies).forEach(x -> {
             if(!x.getType().isInterface() || isFieldAnnotated(x)){
-                Object xDependency = null;
                 try {
                     if(x.trySetAccessible()){
-                        xDependency = x.getType().getConstructor().newInstance();
-                        x.set(obj, instantiateDependencies(xDependency));
+                        x.set(obj, instantiateDependencies(x.getType().getConstructor().newInstance()));
                     }
 
                 }  catch (InstantiationException
@@ -92,5 +93,18 @@ public class Request {
 
     private boolean isFieldAnnotated(Field f){
         return f.getAnnotationsByType(Inject.class).length != 0;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Request request = (Request) o;
+
+        if (controller != null ? !controller.equals(request.controller) : request.controller != null) return false;
+        if (method != null ? !method.equals(request.method) : request.method != null) return false;
+        return params != null ? params.equals(request.params) : request.params == null;
+
     }
 }

@@ -3,7 +3,7 @@ package main.service;
 import injection.annotation.Service;
 
 @Service
-public class AlunoServiceImpl {
+public class AlunoService {
 
     public void defaultMethod(){
         System.out.println("default method");

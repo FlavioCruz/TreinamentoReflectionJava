@@ -8,12 +8,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The type Executioner.
+ */
 public class Executioner {
 
     private Object obj;
     private String methodName;
     private Map<String, String> params;
 
+    /**
+     * Instantiates a new Executioner.
+     *
+     * @param parser the parser
+     */
     public Executioner(Parser parser) {
         Request req = parser.evaluateUrl();
         this.obj = req.instantiateController();
@@ -23,6 +31,7 @@ public class Executioner {
 
     /**
      * Invokes the given method of the given class with the given parameters
+     *
      * @return {@link Object}
      */
     public Object execute(){
@@ -32,7 +41,7 @@ public class Executioner {
             if(params == null){
                 return method.invoke(obj);
             }
-            TypeCast caster = new TypeCast();
+            TypeCast caster = new TypeCastImpl();
             List<Object> objs = new ArrayList<>();
             params.values().stream().forEach( x -> objs.add(caster.castToType(x)));
             return method.invoke(obj, objs.toArray());

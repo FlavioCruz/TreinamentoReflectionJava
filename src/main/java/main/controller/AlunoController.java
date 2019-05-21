@@ -2,13 +2,13 @@ package main.controller;
 
 import injection.annotation.Controller;
 import injection.annotation.Inject;
-import main.service.AlunoServiceImpl;
+import main.service.AlunoService;
 
 @Controller
 public class AlunoController {
 
     @Inject
-    AlunoServiceImpl alunoService;
+    AlunoService alunoService;
 
     public void defaultMethod(){
         alunoService.defaultMethod();

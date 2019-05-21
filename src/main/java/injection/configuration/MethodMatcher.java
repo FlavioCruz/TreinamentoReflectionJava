@@ -1,10 +1,7 @@
 package injection.configuration;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 class MethodMatcher {
@@ -34,7 +31,7 @@ class MethodMatcher {
                     if (method.getParameterCount() == params.size()) {
                         return method;
                     }
-                } else if (method.getParameterCount() == params.size()) {
+                } else if (method.getParameterCount() == params.size() && method.getName().equals(invokedMethod)) {
                     return method;
                 }
             }
@@ -52,7 +49,7 @@ class MethodMatcher {
      */
     private boolean checkParamsType(Method method, Object[] params) {
         if (params.length != 0 && method.getParameters().length != 0) {
-            TypeCast caster = new TypeCast();
+            TypeCast caster = new TypeCastImpl();
             for (int i = 0; i < params.length; i++) {
                 if (!method.getParameters()[i].getType().isInstance(caster.castToType(params[i]))) {
                     return false;
